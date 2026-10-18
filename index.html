@@ -30,8 +30,8 @@ body{
   font-family:var(--b); font-size:16px; line-height:1.5;
   overflow-x:hidden;
 }
-body.lenis{height:auto}
-.lenis.lenis-smooth{scroll-behavior:auto!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 ::selection{background:var(--accent); color:#fff}
 a{color:inherit; text-decoration:none}
 img{max-width:100%}
@@ -435,7 +435,6 @@ footer{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
 <script>
 (function(){
@@ -476,29 +475,19 @@ footer{
     });
   })();
 
-  /* ---------- smooth scroll (Lenis) + GSAP ---------- */
-  var lenis=null;
-  if(typeof Lenis!=="undefined" && !reduce){
-    try{
-      lenis=new Lenis({ lerp:0.09, wheelMultiplier:1 });
-      function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
-      document.body.classList.add("lenis");
-    }catch(e){ lenis=null; }
-  }
+  /* ---------- native smooth scroll + GSAP ---------- */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener("click", function(e){
       var id=a.getAttribute("href"); if(id==="#"||id.length<2) return;
       var t=document.querySelector(id); if(!t) return;
       e.preventDefault();
-      if(lenis) lenis.scrollTo(t,{offset:-10}); else t.scrollIntoView({behavior:reduce?"auto":"smooth"});
+      t.scrollIntoView({behavior:reduce?"auto":"smooth"});
     });
   });
 
   if(typeof gsap!=="undefined"){
     if(typeof ScrollTrigger!=="undefined"){
       gsap.registerPlugin(ScrollTrigger);
-      if(lenis) lenis.on("scroll", ScrollTrigger.update);
     }
     if(!reduce){
       var tl=gsap.timeline({ defaults:{ ease:"expo.out" } });
