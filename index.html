@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 /* ============================================================
    HRITU RAJ, portfolio (guglieri-style)
@@ -227,7 +228,23 @@ body.idle .board-pin blockquote{color:var(--fg)}
 .note.ex .n::after{content:" · sample"; opacity:.6; font-size:12px}
 @media (max-width:560px){ .board-list{padding:30px 22px; gap:26px 22px; justify-content:center} }
 
-footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+.site-footer{border-top:1px solid var(--line); margin-top:20px}
+.foot-top{display:grid; grid-template-columns:1fr 1fr; gap:40px; padding-block:64px 52px}
+.foot-lead{font-family:var(--d); font-weight:600; font-size:clamp(26px,3.4vw,46px); line-height:1.04; letter-spacing:-.02em}
+.foot-mail{display:inline-block; margin-top:18px; background:none; border:0; padding:0; cursor:pointer; font-family:var(--d); font-weight:500; font-size:clamp(19px,2.3vw,32px); color:var(--dim); letter-spacing:-.01em; transition:color .25s}
+.foot-mail:hover{color:var(--fg)}
+.foot-social{display:flex; flex-direction:column; align-items:flex-start; gap:2px; justify-self:end}
+.foot-social a{font-family:var(--d); font-weight:800; font-size:clamp(22px,2.6vw,34px); letter-spacing:-.02em; color:var(--fg); transition:opacity .2s}
+.foot-social a:hover{opacity:.5}
+@media (max-width:760px){ .foot-top{grid-template-columns:1fr; gap:28px} .foot-social{justify-self:start} }
+.foot-next{width:100%; display:flex; align-items:center; gap:.28em; background:none; border:0; border-top:1px solid var(--line); padding:34px 0; cursor:pointer; text-align:left}
+.foot-next .fn-label,.foot-next .fn-name{font-family:var(--d); font-weight:800; font-size:clamp(42px,8vw,120px); letter-spacing:-.03em; line-height:.9}
+.foot-next .fn-label{color:var(--dim); transition:color .3s}
+.foot-next .fn-arrow{font-family:var(--d); font-weight:400; font-size:clamp(30px,5vw,80px); color:var(--dim); transition:color .3s, transform .3s}
+.foot-next .fn-name{color:var(--fg)}
+.foot-next:hover .fn-label{color:var(--fg)}
+.foot-next:hover .fn-arrow{color:var(--fg); transform:translateX(8px)}
+.foot-meta{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-block:26px 56px; border-top:1px solid var(--line);
   font-family:var(--m); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut)}
 </style>
 
@@ -436,10 +453,24 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
 
   </main>
 
-  <footer>
-    <span>© 2026 Hritu Raj</span>
-    <span>India · +91 91225 41148</span>
-    <span>iOS Developer</span>
+  <footer class="site-footer">
+    <div class="foot-top">
+      <div class="foot-cta">
+        <div class="foot-lead">Reach out to connect<br>or collaborate</div>
+        <button class="foot-mail" id="footMail" type="button">hritu.iosdev@gmail.com</button>
+      </div>
+      <nav class="foot-social">
+        <a href="https://github.com/hritu1701" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/hrituraj1025" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://apps.apple.com/in/app/yaari/id6762041467" target="_blank" rel="noopener">App Store</a>
+      </nav>
+    </div>
+    <button class="foot-next" id="footNext" type="button" aria-label="Go to next section">
+      <span class="fn-label">Next</span><span class="fn-arrow">→</span><span class="fn-name" id="footNextName">About</span>
+    </button>
+    <div class="foot-meta">
+      <span>© 2026 Hritu Raj</span><span>India</span><span>iOS Developer</span>
+    </div>
   </footer>
 
 </div>
@@ -488,11 +519,22 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     pages.forEach(function(p){ var on = p.id===id; p.hidden = !on; p.classList.toggle("is-active", on); if(on) reveal(p); });
     tabs.forEach(function(t){ t.classList.toggle("is-active", t.getAttribute("data-tab")===id); });
     if(push && history.replaceState) history.replaceState(null,"","#"+id);
+    updateFoot(id);
     window.scrollTo({ top:0, behavior: reduce ? "auto" : "smooth" });
   }
   tabs.forEach(function(t){
     t.addEventListener("click", function(){ show(t.getAttribute("data-tab"), true); });
   });
+  var order=Array.prototype.map.call(tabs,function(t){return t.getAttribute("data-tab");});
+  function nextOf(id){ var i=order.indexOf(id); return order[(i+1)%order.length]; }
+  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  function updateFoot(id){ var el=document.getElementById("footNextName"); if(el) el.textContent=cap(nextOf(id)); }
+  var footNext=document.getElementById("footNext");
+  if(footNext) footNext.addEventListener("click", function(){ var c=document.querySelector(".tab.is-active"); show(nextOf(c?c.getAttribute("data-tab"):"feed"), true); });
+  (function(){ var fm=document.getElementById("footMail"); if(!fm) return;
+    fm.addEventListener("click", function(){ var t="hritu.iosdev@gmail.com";
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ fm.textContent="Copied ✓"; setTimeout(function(){fm.textContent=t;},1600); }); } });
+  })();
   var start = (location.hash||"").replace("#","");
   if(start && document.getElementById(start) && document.getElementById(start).classList.contains("page")){ show(start, false); }
   else reveal(document.getElementById("feed"));
