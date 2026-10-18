@@ -590,7 +590,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
           var d=document.createElement("div"); d.className="note"+(m.ex?" ex":"");
           d.style.transform="rotate("+(Math.random()*7-3.5).toFixed(2)+"deg)";
           d.style.background=tones[ix%tones.length];
-          d.innerHTML='<div class="t">'+esc(m.text)+'</div><div class="n">— '+esc(m.name||"Anon")+'</div>';
+          d.innerHTML='<div class="t">'+esc(m.text)+'</div>';
           list.appendChild(d);
         });
       }
@@ -600,7 +600,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
       pin.classList.add("swap");
       setTimeout(function(){
         var m=msgs[pi%msgs.length]; pi++;
-        pin.innerHTML='<div><blockquote>“'+esc(m.text)+'”</blockquote><cite>— '+esc(m.name||"Anon")+'</cite></div>';
+        pin.innerHTML='<div><blockquote>“'+esc(m.text)+'”</blockquote></div>';
         pin.classList.remove("swap");
       }, 500);
     }
