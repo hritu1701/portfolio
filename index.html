@@ -205,7 +205,7 @@ body.idle .board-pin blockquote{color:var(--fg)}
   background:radial-gradient(circle at 34% 30%, #ff8a8a, #d61f1f 58%, #8f1010); box-shadow:0 4px 6px rgba(0,0,0,.45)}
 .note::after{content:""; position:absolute; top:-2px; left:50%; width:2px; height:9px; background:rgba(0,0,0,.25); transform:translateX(-50%)}
 .note .t{font-family:"Caveat",cursive; font-size:21px; line-height:1.1; color:#2b2a16; font-weight:600; word-break:break-word}
-.note .n{font-family:"Caveat",cursive; font-size:17px; color:#726e3a; margin-top:12px; letter-spacing:0; text-transform:none}
+.note .n{font-family:"Caveat",cursive; font-size:17px; color:rgba(30,30,25,.55); margin-top:12px; letter-spacing:0; text-transform:none}
 .note.ex .n::after{content:" · sample"; opacity:.6; font-size:12px}
 @media (max-width:560px){ .board-list{padding:30px 22px; gap:26px 22px; justify-content:center} }
 
@@ -585,7 +585,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     function render(){
       if(list){
         list.innerHTML="";
-        var tones=["#fef08a","#fdef9c","#fff3a6","#fde68a","#faf0a0"];
+        var tones=["#fef08a","#ffd6e2","#cfe8ff","#d7f5d0","#ffe0b3","#e7dbff","#c8f3ec"];
         msgs.slice(0,14).forEach(function(m,ix){
           var d=document.createElement("div"); d.className="note"+(m.ex?" ex":"");
           d.style.transform="rotate("+(Math.random()*7-3.5).toFixed(2)+"deg)";
