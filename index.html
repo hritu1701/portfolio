@@ -561,6 +561,24 @@ body.idle .idle-screen{opacity:1; visibility:visible}
   if(start && document.getElementById(start) && document.getElementById(start).classList.contains("page")){ show(start, false); }
   else reveal(document.getElementById("feed"));
 
+  /* ---------- 3D tilt on cards / tiles ---------- */
+  (function(){
+    if(reduce || (window.matchMedia && matchMedia("(hover:none)").matches)) return;
+    function addTilt(trigger, target, max){
+      if(!trigger||!target) return;
+      target.style.transition="transform .18s ease"; target.style.willChange="transform";
+      trigger.addEventListener("mousemove", function(e){
+        var r=trigger.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5;
+        target.style.transform="perspective(800px) rotateY("+(px*max).toFixed(2)+"deg) rotateX("+(-py*max).toFixed(2)+"deg) translateZ(6px)";
+      });
+      trigger.addEventListener("mouseleave", function(){ target.style.transform=""; });
+    }
+    document.querySelectorAll(".tile").forEach(function(t){ addTilt(t, t.querySelector(".tile-art"), 11); });
+    document.querySelectorAll(".card:not(.feature)").forEach(function(c){ addTilt(c, c, 6); });
+    var sc=document.querySelector(".sharecard"); if(sc) addTilt(sc, sc, 5);
+  })();
+
   /* ---------- live IST clock ---------- */
   (function(){
     var el=document.getElementById("clock"); if(!el) return;
