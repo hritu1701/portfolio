@@ -1,4 +1,6 @@
 <title>Hritu Raj</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* ============================================================
@@ -14,8 +16,8 @@
   --dim:#c7c7c9;         /* de-emphasised statement words */
   --mut:#8c8c90;         /* bio / meta grey */
   --line:#e8e8e6;
-  --accent:#0a84ff;      /* links / hover */
-  --pill:#ffe24d;        /* highlight pill (guglieri yellow) */
+  --accent:#0c0c0d;      /* links / hover (monochrome) */
+  --pill:#0c0c0d;        /* highlight pill (solid black) */
   color-scheme:light;
 
   --d:"Archivo","Hanken Grotesk",system-ui,sans-serif;
@@ -54,7 +56,7 @@ img{max-width:100%}
 .top{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; padding-top:calc(26px + env(safe-area-inset-top,0px)); padding-bottom:24px}
 .id .name{font-family:var(--d); font-weight:600; font-size:clamp(18px,2vw,22px); letter-spacing:-.01em}
 .id .meta{font-family:var(--m); font-size:12px; letter-spacing:.02em; color:var(--mut); margin-top:6px; font-variant-numeric:tabular-nums}
-.id .meta .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:#2ecb6a; margin-right:7px; vertical-align:middle}
+.id .meta .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--fg); margin-right:7px; vertical-align:middle}
 .bio{color:var(--mut); font-size:clamp(14px,1.45vw,17px); line-height:1.5; max-width:46ch; justify-self:end}
 .bio b{color:var(--fg); font-weight:600}
 @media (max-width:760px){ .top{grid-template-columns:1fr; gap:14px} .bio{justify-self:start} }
@@ -80,7 +82,7 @@ img{max-width:100%}
 .stmt b{color:var(--fg); font-weight:900}
 .stmt .w{display:inline-block}
 .stmt .emo{display:inline-block; font-weight:400; transform:translateY(.04em); filter:saturate(1.05)}
-.stmt .pill{display:inline-block; background:var(--pill); color:#1a1a1a; border-radius:.42em; padding:0 .22em; font-weight:900;
+.stmt .pill{display:inline-block; background:var(--pill); color:#fff; border-radius:.42em; padding:0 .22em; font-weight:900;
   box-decoration-break:clone; -webkit-box-decoration-break:clone}
 .stmt a{color:var(--accent)}
 
@@ -116,12 +118,12 @@ img{max-width:100%}
   display:flex; flex-direction:column; min-height:260px; transition:transform .5s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s}
 .card:hover{transform:translateY(-6px); box-shadow:0 26px 50px -28px rgba(12,12,13,.3); border-color:#d6d6d4}
 .card.feature{grid-column:1 / -1; flex-direction:row; padding:0; min-height:0}
-.feat-img{flex:0 0 46%; overflow:hidden; background:#efeadf}
+.feat-img{flex:0 0 46%; overflow:hidden; background:#f0f0ee}
 .feat-img img{width:100%; height:100%; min-height:280px; object-fit:cover; display:block}
 .feat-body{flex:1; min-width:0; padding:30px; display:flex; flex-direction:column}
 .card-top{display:flex; align-items:center; justify-content:space-between}
 .card-idx{font-family:var(--m); font-size:12px; letter-spacing:.1em; color:var(--mut)}
-.card-badge{font-family:var(--m); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); border:1px solid #cfe3ff; border-radius:40px; padding:5px 11px}
+.card-badge{font-family:var(--m); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); border:1px solid var(--line); border-radius:40px; padding:5px 11px}
 .card h3{font-family:var(--d); font-weight:900; font-size:clamp(26px,3.6vw,40px); letter-spacing:-.02em; margin:16px 0 12px; line-height:1}
 .card.feature h3{margin-top:14px}
 .card p{color:var(--mut); font-size:14.5px; line-height:1.55; max-width:46ch}
@@ -190,7 +192,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <!-- FEED -->
     <section class="page is-active" id="feed" role="tabpanel">
       <div class="stmt-wrap">
-        <h1 class="stmt">I'm <span class="emo">📱</span> <b>Hritu Raj</b>, an <b>iOS developer</b> who designs and <b>ships</b> SwiftUI apps that make it to the <b>App&nbsp;Store</b> — real-time social, campus platforms and reading tools. <span class="pill">Built to ship</span></h1>
+        <h1 class="stmt">I ship <span class="emo">📱</span> <b>iOS apps</b> to the <b>App&nbsp;Store</b>, built in <b>SwiftUI</b>. <span class="pill">Built to ship</span></h1>
       </div>
       <div class="body-block">
         <div class="eyebrow">Latest ship</div>
@@ -210,7 +212,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <!-- ABOUT -->
     <section class="page" id="about" role="tabpanel" hidden>
       <div class="stmt-wrap">
-        <h1 class="stmt">A final-year <span class="emo">🎓</span> <b>CSE student</b> at LPU who already ships <b>production iOS</b>, with real apps <b>live on the App&nbsp;Store</b> and <b>200+</b> problems solved on LeetCode.</h1>
+        <h1 class="stmt">Final-year <span class="emo">🎓</span> <b>CSE</b> at LPU, already shipping <b>production iOS</b> — <b>200+</b> on LeetCode.</h1>
       </div>
       <div class="body-block">
         <div class="eyebrow">By the numbers</div>
@@ -242,7 +244,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <!-- WORK -->
     <section class="page" id="work" role="tabpanel" hidden>
       <div class="stmt-wrap">
-        <h1 class="stmt">I build and ship apps end to end — <span class="emo">💬</span> <b>Yaari</b>, campus <b>platforms</b> and reading <b>tools</b> — in <b>SwiftUI</b> &amp; <b>Firebase</b>, with clean <b>MVVM</b> architecture.</h1>
+        <h1 class="stmt">I <b>build</b> &amp; <b>ship</b> apps end to end <span class="emo">💬</span> — <b>SwiftUI</b>, <b>Firebase</b>, clean <b>MVVM</b>.</h1>
       </div>
       <div class="body-block">
         <div class="eyebrow">Selected projects</div>
@@ -285,7 +287,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <!-- CONTACT -->
     <section class="page" id="contact" role="tabpanel" hidden>
       <div class="stmt-wrap">
-        <h1 class="stmt">Let's build <span class="emo">🚀</span> <b>something</b>. Reach out to <b>connect</b> or <b>collaborate</b> — I reply fast. <span class="pill">Open to roles</span></h1>
+        <h1 class="stmt">Let's <b>build</b> <span class="emo">🚀</span> something. <b>Open to roles</b>, I reply fast. <span class="pill">Say hello</span></h1>
       </div>
       <div class="body-block">
         <div class="eyebrow">Say hello</div>
