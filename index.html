@@ -126,6 +126,16 @@ header{
   margin-top:28px; max-width:44ch; font-size:clamp(16px,1.7vw,20px); line-height:1.45; color:var(--fg);
 }
 .hero-sub .q{color:var(--muted)}
+/* kinetic morphing line (guglieri homage) */
+.hero-morph{
+  font-family:var(--d); font-weight:800; letter-spacing:-.03em; line-height:.92;
+  font-size:clamp(34px,6.2vw,84px); margin-top:16px;
+  display:inline-flex; align-items:baseline; gap:.28em; flex-wrap:wrap; color:var(--fg);
+}
+.morph-rot{position:relative; display:inline-block; color:var(--accent); will-change:width}
+.morph-word{position:absolute; left:0; top:0; white-space:nowrap; opacity:0; filter:blur(16px);
+  transform:translateY(.14em) scale(.94); transition:opacity .55s ease, filter .55s ease, transform .55s ease}
+.morph-word.is-active{position:relative; opacity:1; filter:blur(0); transform:none}
 .hero-foot{
   margin-top:40px; display:flex; flex-wrap:wrap; gap:20px 36px; align-items:center;
   font-family:var(--m); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
@@ -342,6 +352,15 @@ footer{
         <span class="ln"><span data-reveal>Hritu</span></span>
         <span class="ln"><span data-reveal>Raj</span></span>
       </h1>
+      <div class="hero-morph" aria-label="Built to ship">
+        <span class="morph-static">Built to</span>
+        <span class="morph-rot" id="morph">
+          <span class="morph-word is-active">ship</span>
+          <span class="morph-word">scale</span>
+          <span class="morph-word">last</span>
+          <span class="morph-word">delight</span>
+        </span>
+      </div>
       <p class="hero-sub">I design and ship iOS apps that make it to the App Store <span class="q">— real-time social, campus platforms and reading tools, built in Swift &amp; SwiftUI.</span></p>
       <div class="hero-foot">
         <span class="scrollcue"><i></i> Scroll</span>
@@ -663,9 +682,10 @@ footer{
     }
     if(!reduce){
       var tl=gsap.timeline({ defaults:{ ease:"expo.out" } });
-      tl.from(".hero-title .ln span", { yPercent:115, duration:1.1, stagger:.08 })
-        .from(".eyebrow", { opacity:0, y:14, duration:.8 }, "-=.8")
-        .from(".hero-sub", { opacity:0, y:18, duration:.8 }, "-=.6")
+      tl.from(".hero-title .ln span", { yPercent:115, filter:"blur(18px)", duration:1.15, stagger:.08 })
+        .from(".eyebrow", { opacity:0, y:14, duration:.8 }, "-=.9")
+        .from(".hero-morph", { opacity:0, y:22, filter:"blur(14px)", duration:.9 }, "-=.7")
+        .from(".hero-sub", { opacity:0, y:18, duration:.8 }, "-=.65")
         .from(".hero-foot > *", { opacity:0, y:14, duration:.6, stagger:.08 }, "-=.5")
         .from("nav", { opacity:0, y:-14, duration:.6 }, "-=.9");
 
@@ -680,6 +700,30 @@ footer{
     }
   }
 
+  /* ---------- morphing hero word ---------- */
+  (function(){
+    var rot=document.getElementById("morph"); if(!rot) return;
+    var words=rot.querySelectorAll(".morph-word"); if(words.length<2 || reduce) return;
+    var i=0;
+    setInterval(function(){
+      words[i].classList.remove("is-active");
+      i=(i+1)%words.length;
+      words[i].classList.add("is-active");
+    }, 2100);
+  })();
+
+  /* ---------- cursor-reactive hero ---------- */
+  (function(){
+    var h=document.getElementById("top"); if(!h || reduce) return;
+    var tx=0,ty=0,cx=0,cy=0;
+    window.addEventListener("mousemove", function(e){ tx=(e.clientX/innerWidth-0.5); ty=(e.clientY/innerHeight-0.5); });
+    (function loop(){
+      cx+=(tx-cx)*0.06; cy+=(ty-cy)*0.06;
+      h.style.transform="translate3d("+(cx*-14)+"px,"+(cy*-10)+"px,0)";
+      requestAnimationFrame(loop);
+    })();
+  })();
+
   /* ---------- WebGL stage: floating app-icon tiles ---------- */
   (function(){
     var mount=document.getElementById("stage");
@@ -689,7 +733,7 @@ footer{
     if(!gl){ showFallback(); return; }
     function showFallback(){ var f=document.getElementById("fallback"); if(f) f.hidden=false; }
 
-    var scene, camera, renderer, group, raf, clock, tiles=[];
+    var scene, camera, renderer, group, raf, clock, tiles=[], groupBase=1;
     var mouse={x:0,y:0}, tgt={x:0,y:0};
     var palette=[
       [0x0a84ff,0x5e5ce6],[0x5e5ce6,0xbf5af2],[0x30d158,0x0a84ff],
@@ -741,10 +785,13 @@ footer{
           uniforms:{ uA:{value:new THREE.Color(pair[0])}, uB:{value:new THREE.Color(pair[1])} }
         });
         var m=new THREE.Mesh(geo, mat);
-        var s=0.55+Math.random()*0.8; m.scale.set(s,s,s);
-        m.position.set((Math.random()-0.5)*5.6, (Math.random()-0.5)*5.2, (Math.random()-0.5)*3.6);
+        var s=0.55+Math.random()*0.8;
+        var bx=(Math.random()-0.5)*5.6, by=(Math.random()-0.5)*5.2, bz=(Math.random()-0.5)*3.6;
         m.rotation.set(Math.random()*0.6-0.3, Math.random()*0.6-0.3, Math.random()*0.5-0.25);
-        m.userData={ sp:0.2+Math.random()*0.5, ph:Math.random()*6.28, ry:(Math.random()-0.5)*0.4, rx:(Math.random()-0.5)*0.3, baseY:m.position.y, amp:0.18+Math.random()*0.32 };
+        m.userData={ sp:0.2+Math.random()*0.5, ph:Math.random()*6.28, ry:(Math.random()-0.5)*0.4, rx:(Math.random()-0.5)*0.3,
+          s:s, baseX:bx, baseY:by, baseZ:bz, amp:0.18+Math.random()*0.32,
+          spawnX:bx*2.5+(Math.random()-0.5)*3, spawnY:by*2.5+(Math.random()-0.5)*3, spawnZ:bz-4.5 };
+        m.scale.set(0,0,0); m.position.set(m.userData.spawnX, m.userData.spawnY, m.userData.spawnZ);
         tiles.push(m); group.add(m);
       }
 
@@ -764,18 +811,23 @@ footer{
         raf=requestAnimationFrame(animate);
         var t=clock.getElapsedTime();
         mouse.x+=(tgt.x-mouse.x)*0.05; mouse.y+=(tgt.y-mouse.y)*0.05;
+        var e=Math.min(t/1.7,1); e=1-Math.pow(1-e,3);   /* intro: scatter -> settle */
         for(var i=0;i<tiles.length;i++){
-          var m=tiles[i], u=m.userData;
-          m.position.y=u.baseY+Math.sin(t*u.sp+u.ph)*u.amp;
+          var m=tiles[i], u=m.userData, sc=u.s*e;
+          m.scale.set(sc,sc,sc);
+          m.position.x=u.spawnX+(u.baseX-u.spawnX)*e;
+          m.position.z=u.spawnZ+(u.baseZ-u.spawnZ)*e;
+          m.position.y=u.spawnY+(u.baseY-u.spawnY)*e + Math.sin(t*u.sp+u.ph)*u.amp*e;
           m.rotation.y+=u.ry*0.01; m.rotation.x+=u.rx*0.01;
         }
         group.rotation.y=mouse.x*0.5; group.rotation.x=mouse.y*0.35;
+        group.scale.setScalar(groupBase*(0.4+0.6*e));
         camera.position.x += (mouse.x*0.8 - camera.position.x)*0.05;
         camera.position.y += (-mouse.y*0.6 - camera.position.y)*0.05;
         camera.lookAt(0,0,0);
         renderer.render(scene, camera);
       }
-      function place(){ group.position.x = innerWidth>900 ? 1.6 : 0; group.position.y = innerWidth>900 ? 0 : 0.5; group.scale.setScalar(innerWidth>900?1:0.82); }
+      function place(){ group.position.x = innerWidth>900 ? 1.6 : 0; group.position.y = innerWidth>900 ? 0 : 0.5; groupBase = innerWidth>900?1:0.82; }
       place(); window.addEventListener("resize", place);
       animate();
     }catch(err){ showFallback(); }
