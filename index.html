@@ -68,7 +68,9 @@ img{max-width:100%}
 .rule{border:0; border-top:1px solid var(--line); margin:0}
 
 /* ---- tabs ---- */
-.tabs{display:flex; gap:26px; flex-wrap:wrap; align-items:center; padding-block:18px; font-family:var(--d); font-weight:600; font-size:15px}
+.tabs{position:sticky; top:0; z-index:30; display:flex; gap:26px; flex-wrap:wrap; align-items:center; padding-block:16px;
+  font-family:var(--d); font-weight:600; font-size:15px;
+  background:rgba(255,255,255,.9); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
 .tab{background:none; border:0; padding:0; cursor:pointer; color:var(--dim); font:inherit; letter-spacing:-.01em; transition:color .25s}
 .tab:hover{color:var(--fg)}
 .tab.is-active{color:var(--fg)}
