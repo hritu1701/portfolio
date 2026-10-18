@@ -195,6 +195,13 @@ img{max-width:100%}
 .board-pin cite{display:block; font-family:var(--m); font-style:normal; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); margin-top:16px}
 .board-pin.swap blockquote{opacity:0; transform:translateY(10px)}
 body.idle .board-pin blockquote{color:var(--fg)}
+.idle-screen{position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:6vw;
+  background:rgba(255,255,255,.96); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  opacity:0; visibility:hidden; transition:opacity .6s ease, visibility .6s}
+body.idle .idle-screen{opacity:1; visibility:visible}
+.idle-inner{max-width:1000px; text-align:center}
+.idle-screen blockquote{margin:0; font-family:var(--d); font-weight:800; letter-spacing:-.02em; line-height:1.06; font-size:clamp(28px,5.6vw,84px); color:var(--fg); transition:opacity .3s ease}
+.idle-hint{display:block; margin-top:30px; font-family:var(--m); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mut)}
 .sharecard{background:#fff; border:1px solid var(--line); border-radius:24px; padding:26px;
   box-shadow:0 30px 60px -36px rgba(12,12,13,.32); display:flex; flex-direction:column; gap:11px}
 .sc-icon{position:relative; width:52px; height:36px; margin-bottom:4px}
@@ -475,6 +482,13 @@ body.idle .board-pin blockquote{color:var(--fg)}
     </div>
   </footer>
 
+  <div class="idle-screen" id="idleScreen" aria-hidden="true">
+    <div class="idle-inner">
+      <blockquote id="idleMsg"></blockquote>
+      <span class="idle-hint">Move to dismiss</span>
+    </div>
+  </div>
+
 </div>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800;900&family=Caveat:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -671,9 +685,25 @@ body.idle .board-pin blockquote{color:var(--fg)}
     }
     function startRotate(){ if(pinTimer) clearInterval(pinTimer); pinTimer=setInterval(rotate, document.body.classList.contains("idle")?3200:5600); }
 
-    var idleT=null;
-    function resetIdle(){ document.body.classList.remove("idle"); clearTimeout(idleT); idleT=setTimeout(function(){ document.body.classList.add("idle"); startRotate(); }, 12000); }
-    ["mousemove","scroll","keydown","touchstart","click"].forEach(function(ev){ window.addEventListener(ev, resetIdle, {passive:true}); });
+    var idleT=null, idleRot=null, ii=0, idleMsgEl=document.getElementById("idleMsg");
+    function showIdleMsg(){
+      if(!idleMsgEl||!msgs.length) return;
+      var m=msgs[ii%msgs.length]; ii++;
+      idleMsgEl.style.opacity="0";
+      setTimeout(function(){ idleMsgEl.textContent="“"+(m.text||"")+"”"; idleMsgEl.style.opacity="1"; }, 300);
+    }
+    function enterIdle(){
+      document.body.classList.add("idle");
+      showIdleMsg();
+      if(idleRot) clearInterval(idleRot);
+      idleRot=setInterval(showIdleMsg, 4500);
+      startRotate();
+    }
+    function resetIdle(){
+      if(document.body.classList.contains("idle")){ document.body.classList.remove("idle"); if(idleRot){ clearInterval(idleRot); idleRot=null; } }
+      clearTimeout(idleT); idleT=setTimeout(enterIdle, 12000);
+    }
+    ["mousemove","scroll","keydown","touchstart","click","wheel"].forEach(function(ev){ window.addEventListener(ev, resetIdle, {passive:true}); });
 
     function add(m){
       msgs.unshift(m);
