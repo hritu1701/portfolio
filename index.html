@@ -54,6 +54,9 @@ img{max-width:100%}
 
 /* ---- header ---- */
 .top{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; padding-top:calc(26px + env(safe-area-inset-top,0px)); padding-bottom:24px}
+.brandrow{display:flex; align-items:center; gap:12px}
+.logo{display:inline-flex; width:38px; flex:0 0 auto}
+.logo svg{width:100%; height:auto; display:block}
 .id .name{font-family:var(--d); font-weight:600; font-size:clamp(18px,2vw,22px); letter-spacing:-.01em}
 .id .meta{font-family:var(--m); font-size:12px; letter-spacing:.02em; color:var(--mut); margin-top:6px; font-variant-numeric:tabular-nums}
 .id .meta .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--fg); margin-right:7px; vertical-align:middle}
@@ -134,6 +137,10 @@ img{max-width:100%}
 @media (max-width:900px){ .proj{grid-template-columns:1fr 1fr} }
 @media (max-width:760px){ .card.feature{flex-direction:column} .feat-img{flex:none; width:100%} .feat-img img{min-height:0; height:220px} }
 @media (max-width:560px){ .proj{grid-template-columns:1fr} }
+.card.soon{border-style:dashed; background:transparent; box-shadow:none}
+.card.soon:hover{transform:none; box-shadow:none; border-color:#d0d0ce}
+.card.soon h3,.card.soon .card-idx{color:var(--mut)}
+.card.soon .card-badge{color:var(--mut)}
 
 /* contact */
 .cform{display:grid; gap:16px; max-width:560px; margin-top:8px}
@@ -203,7 +210,10 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
 
   <header class="top">
     <div class="id">
-      <div class="name">Hritu Raj</div>
+      <div class="brandrow">
+        <span class="logo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 76" width="40" height="26" fill="none"><path fill="#000" d="M89.283 5c.653.018 1.62.249 2.348.912.729.655 1.016 1.43 1.159 1.998.414 2.243-.033 3.487-.243 4.903-.282 1.502-.595 2.968-.87 4.432-1.646 9.418-4.44 21.165.661 27.834q3.57.867 7.134 1.746 1.434.355 2.864.72c1.117.287 2.261.595 3.404.968.602.206 1.126.364 1.909.761a4.5 4.5 0 0 1 .545.343c.094.072.193.155.3.263a2.4 2.4 0 0 1 .43.59c.138.219.357.98.16 1.576a2.2 2.2 0 0 1-.757 1.122 2.4 2.4 0 0 1-.516.31c-.509.21-.697.213-.944.258a7 7 0 0 1-.586.06c-1.517.07-2.762-.053-4.094-.21-1.905-.244-3.84-.58-5.783-1.192-1.421-.45-2.853-1.07-4.171-1.957a22 22 0 0 1-1.552-1.471 2236 2236 0 0 0-12.561-3.012l-.028.013q-1.6.378-3.198.767c.102.77.143 1.608.103 2.532-1.04 4.59-4.918 6.188-7.678 7.301q-1.043.328-2.082.612c-.102 2.196-.072 4.311.16 6.308.36.776.705 1.523 1.073 2.35.119.268.256.583.364.843.076.185.14.348.199.51.03.092.104.272.166.581.016.086.034.19.043.352l.003.071c.002.094 0 .208-.017.358-.048.283-.097.822-.73 1.457-.645.67-1.784.744-2.24.585-.506-.139-.704-.304-.859-.41a3 3 0 0 1-.274-.237l-.038-.04-.066-.067-.1-.118c-.656-.879-.766-1.15-1.155-1.779a8 8 0 0 1-.718-1.627q-.104-.647-.188-1.284l-.17-.368c-.918-1.968-1.853-3.96-2.783-5.955-8.047 1.185-15.992.856-23.938.398-4.222 1.53-8.44 3.072-12.682 4.55q-1.014.354-2.014.712c-2.62.93-5.23 1.91-7.93 2.781-.671.214-1.37.428-2.106.614a11 11 0 0 1-1.235.25c-.302.014-.408.12-1.266-.042a2.4 2.4 0 0 1-.434-.152 2.4 2.4 0 0 1-.804-.623c-.682-.822-.53-1.847-.344-2.266.11-.263.157-.325.217-.424q.087-.136.168-.237a4 4 0 0 1 .26-.292c.97-.885 1.476-1.111 2.126-1.527.634-.38 1.247-.722 1.89-1.066 1.446-.77 2.896-1.503 4.364-2.233q3.627-1.78 7.265-3.524c-.553-1.034-.25-2.46.12-3.013.726-1.188 1.34-1.532 1.926-1.991 1.141-.81 2.239-1.388 3.325-1.947 2.167-1.097 4.32-2.041 6.5-2.979 1.42-.61 2.85-1.207 4.287-1.8a639 639 0 0 1 11.532-4.614l-.21-.046c-.652.307-1.407.58-2.384.784-.584.07-1.52.199-2.646-.509a3.3 3.3 0 0 1-1.285-1.672 1479 1479 0 0 0-24.75-5.248 2.085 2.085 0 0 1 .824-4.087c8.051 1.628 16.075 3.34 24.09 5.101.53-1.993 1.203-3.73 1.88-5.457a135 135 0 0 1-2.828-8.418 6 6 0 0 1-.183-.834 5 5 0 0 1-.044-.465c-.01-.22-.003-.454.032-.705a3.2 3.2 0 0 1 .232-.83 3 3 0 0 1 .752-1.043c.704-.605 1.4-.726 1.96-.75a4.2 4.2 0 0 1 1.11.12c.32.077.506.14.75.229.508.191.81.34 1.2.54a51 51 0 0 1 1.683 1.053l.043-.092a67 67 0 0 1 1.769-3.54c.325-.597.665-1.193 1.07-1.813.216-.324.423-.624.724-.989a6 6 0 0 1 .556-.587c.236-.194.518-.507 1.313-.771 2.65-.833 6.714-1.263 9.618 1.355 2.667 2.48 3.294 5.569 3.73 8.265 4.345-3.556 8.759-7.098 13.42-10.452 1.486-1.011 2.932-1.982 4.812-2.794.773-.301 1.57-.647 2.91-.628Zm-.729 4.729c-.13.044-.268.096-.403.155-1.248.531-2.628 1.41-3.973 2.335-5.307 3.815-10.463 8.043-15.662 12.309.017 2.744-.178 5.431-.424 8.09.222-.047.485-.09.864-.127a3.3 3.3 0 0 1 .668.01 2.7 2.7 0 0 1 1.243.465c.083.059.166.117.322.266.608.517.907 1.69.735 2.319a2.7 2.7 0 0 1-.38.952 3 3 0 0 1-.233.313 3.5 3.5 0 0 1-.556.527 7 7 0 0 1-.365.268l-.063.038q.164.222.326.446c.455.74.954 1.443 1.446 2.16a2261 2261 0 0 1 15.067 3.57c-3.975-8.661-.562-19.001.55-27.321.269-1.458.503-2.915.677-4.336.11-.84.18-1.79.161-2.439Z"/></svg></span>
+        <span class="name">Hritu Raj</span>
+      </div>
       <div class="meta" id="clock"><span class="dot"></span>Local time — 00:00:00 India</div>
     </div>
     <p class="bio"><b>iOS Developer</b> specialised in building and shipping SwiftUI apps to the App Store — real-time social, campus platforms and reading tools, architected end to end with MVVM &amp; Firebase.</p>
@@ -215,6 +225,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <button class="tab is-active" data-tab="feed" role="tab">Feed</button>
     <button class="tab" data-tab="about" role="tab">About</button>
     <button class="tab" data-tab="work" role="tab">Work</button>
+    <button class="tab" data-tab="products" role="tab">Products</button>
     <button class="tab" data-tab="board" role="tab">Board</button>
     <button class="tab" data-tab="contact" role="tab">Contact</button>
     <a class="tab-ext" href="Hritu-Raj-Resume.pdf" target="_blank" rel="noopener" download>Résumé ↓</a>
@@ -328,6 +339,34 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
             <div class="stack"><span>C++</span><span>Swift</span><span>Design Patterns</span></div>
             <span class="arrow">↗</span>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="page" id="products" role="tabpanel" hidden>
+      <div class="stmt-wrap">
+        <h1 class="stmt"><b>Products</b> I've shipped <span class="emo">🚀</span> — starting with <b>Yaari</b>, more on the way.</h1>
+      </div>
+      <div class="body-block">
+        <div class="eyebrow">Shipped products</div>
+        <div class="proj">
+          <a class="card feature" data-cursor href="https://apps.apple.com/in/app/yaari/id6762041467" target="_blank" rel="noopener">
+            <div class="feat-img"><img src="assets/yaari.png" alt="Yaari — social events app, live on the App Store" loading="lazy"></div>
+            <div class="feat-body">
+              <div class="card-top"><span class="card-idx">Product 01</span><span class="card-badge">App Store ↗</span></div>
+              <h3>Yaari</h3>
+              <p>A social app for meeting new people over curated dinners and events — discovery &amp; ticketing, real-time chat, connections and location feeds. Live on the App Store.</p>
+              <div class="stack"><span>SwiftUI</span><span>Firebase</span><span>iOS</span></div>
+            </div>
+            <span class="arrow">↗</span>
+          </a>
+          <div class="card soon">
+            <div class="card-top"><span class="card-idx">Product 02</span><span class="card-badge">Soon</span></div>
+            <h3>More coming</h3>
+            <p>New products are in the works — this space fills up as I ship.</p>
+            <div class="stack"><span>In progress</span></div>
+          </div>
         </div>
       </div>
     </section>
