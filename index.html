@@ -160,6 +160,38 @@ img{max-width:100%}
 .socials a:hover{color:var(--fg)}
 .socials a::after{content:"↗"; margin-left:5px; color:var(--accent)}
 
+/* ---- guestboard ---- */
+.board{display:grid; grid-template-columns:1fr minmax(290px,360px); gap:34px; align-items:start}
+@media (max-width:760px){ .board{grid-template-columns:1fr} }
+.board-pin{min-height:150px; display:flex; align-items:center}
+.board-pin blockquote{margin:0; font-family:var(--d); font-weight:800; letter-spacing:-.02em; line-height:1.06;
+  font-size:clamp(23px,3.1vw,42px); color:var(--dim); transition:opacity .5s ease, transform .5s ease}
+.board-pin blockquote b{color:var(--fg)}
+.board-pin cite{display:block; font-family:var(--m); font-style:normal; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); margin-top:16px}
+.board-pin.swap blockquote{opacity:0; transform:translateY(10px)}
+body.idle .board-pin blockquote{color:var(--fg)}
+.sharecard{background:#fff; border:1px solid var(--line); border-radius:24px; padding:26px;
+  box-shadow:0 30px 60px -36px rgba(12,12,13,.32); display:flex; flex-direction:column; gap:11px}
+.sc-icon{position:relative; width:52px; height:36px; margin-bottom:4px}
+.sc-icon span{position:absolute; width:22px; height:22px; border-radius:7px}
+.sc-icon span:nth-child(1){left:0; top:4px; background:#ffc83d; transform:rotate(-13deg)}
+.sc-icon span:nth-child(2){left:13px; top:8px; background:#ff3d8b; transform:rotate(9deg)}
+.sc-icon span:nth-child(3){left:27px; top:3px; background:#2e7bff; transform:rotate(-5deg)}
+.sharecard h3{font-family:var(--d); font-weight:800; font-size:19px; margin:0; letter-spacing:-.01em}
+.sharecard p{color:var(--mut); font-size:13.5px; line-height:1.4; margin:0 0 6px}
+.sharecard input{font-family:var(--b); font-size:15px; color:var(--fg); background:#f4f4f3; border:1px solid transparent; border-radius:40px; padding:14px 18px; width:100%; transition:background .2s, border-color .2s}
+.sharecard input:focus{outline:none; background:#fff; border-color:var(--line)}
+.sharecard button{font-family:var(--m); font-size:14px; letter-spacing:.02em; color:#fff; background:var(--fg); border:0; border-radius:40px; padding:14px; cursor:pointer; transition:opacity .2s}
+.sharecard button:hover{opacity:.85}
+.sharecard button:disabled{opacity:.5; cursor:default}
+.sc-status{font-family:var(--m); font-size:12px; color:var(--mut); min-height:1em; margin:2px 0 0}
+.sc-status.ok{color:#1a8f4b}.sc-status.err{color:#c0392b}
+.board-list{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.note{border:1px solid var(--line); border-radius:14px; padding:12px 14px; max-width:320px; background:#fff}
+.note .t{font-size:14px; line-height:1.4}
+.note .n{font-family:var(--m); font-size:11px; letter-spacing:.06em; color:var(--mut); margin-top:6px}
+.note.ex .n::after{content:" · sample"; opacity:.6}
+
 footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
   font-family:var(--m); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut)}
 </style>
@@ -183,6 +215,7 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
     <button class="tab is-active" data-tab="feed" role="tab">Feed</button>
     <button class="tab" data-tab="about" role="tab">About</button>
     <button class="tab" data-tab="work" role="tab">Work</button>
+    <button class="tab" data-tab="board" role="tab">Board</button>
     <button class="tab" data-tab="contact" role="tab">Contact</button>
     <a class="tab-ext" href="Hritu-Raj-Resume.pdf" target="_blank" rel="noopener" download>Résumé ↓</a>
   </nav>
@@ -207,12 +240,27 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
           <span class="arrow">↗</span>
         </a>
       </div>
+      <div class="body-block">
+        <div class="eyebrow">Guestboard</div>
+        <div class="board">
+          <div class="board-pin" id="boardPin" aria-live="polite"></div>
+          <form class="sharecard" id="shareForm">
+            <div class="sc-icon" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>Share a message on the site</h3>
+            <p>Be nice — what you say may show up to others when the site is idle.</p>
+            <input id="sc-msg" name="message" maxlength="140" placeholder="Message" autocomplete="off" required>
+            <input id="sc-name" name="name" maxlength="40" placeholder="Name" autocomplete="name" required>
+            <button type="submit" id="sc-submit">Submit</button>
+            <p class="sc-status" id="sc-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
     </section>
 
     <!-- ABOUT -->
     <section class="page" id="about" role="tabpanel" hidden>
       <div class="stmt-wrap">
-        <h1 class="stmt">Final-year <span class="emo">🎓</span> <b>CSE</b> at LPU, already shipping <b>production iOS</b> — <b>200+</b> on LeetCode.</h1>
+        <h1 class="stmt"><b>iOS Developer</b> <span class="emo">🎓</span> shipping <b>production iOS</b> to the <b>App&nbsp;Store</b> — B.Tech CSE from LPU, <b>200+</b> on LeetCode.</h1>
       </div>
       <div class="body-block">
         <div class="eyebrow">By the numbers</div>
@@ -281,6 +329,17 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
             <span class="arrow">↗</span>
           </a>
         </div>
+      </div>
+    </section>
+
+    <!-- BOARD -->
+    <section class="page" id="board" role="tabpanel" hidden>
+      <div class="stmt-wrap">
+        <h1 class="stmt">Messages from <span class="emo">👋</span> <b>visitors</b> — the kind ones get <b>pinned</b> when the site goes idle.</h1>
+      </div>
+      <div class="body-block">
+        <div class="eyebrow">Responses</div>
+        <div class="board-list" id="boardList"></div>
       </div>
     </section>
 
@@ -444,6 +503,91 @@ footer{border-top:1px solid var(--line); margin-top:10px; padding-block:30px 60p
         }).catch(function(){ set("Couldn't send from here — email me directly at hritu.iosdev@gmail.com","err"); })
         .finally(function(){ btn.disabled=false; });
     });
+  })();
+
+  /* ---------- guestboard (local in preview, Firebase on the deployed site) ---------- */
+  (function(){
+    var form=document.getElementById("shareForm"); if(!form) return;
+    var pin=document.getElementById("boardPin"), list=document.getElementById("boardList"),
+        statusEl=document.getElementById("sc-status"), btn=document.getElementById("sc-submit");
+
+    /* >>> To make the board SHARED across visitors on your deployed Render site,
+       paste your Firebase web config object here (keep it null to run local-only): */
+    var firebaseConfig = null; // { apiKey:"…", authDomain:"…", projectId:"…", appId:"…" }
+
+    var examples=[
+      {text:"Love the kinetic typography — very clean.", name:"Aditi"},
+      {text:"Yaari looks slick, congrats on the ship!", name:"Rahul"},
+      {text:"The monochrome hits. Great portfolio.", name:"A visitor"}
+    ];
+    var LS="hr_board_v1";
+    function loadLocal(){ try{ return JSON.parse(localStorage.getItem(LS)||"[]"); }catch(e){ return []; } }
+    function saveLocal(a){ try{ localStorage.setItem(LS, JSON.stringify(a.slice(0,40))); }catch(e){} }
+    function esc(s){ return (s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+
+    var db=null, msgs=[], pi=0, pinTimer=null;
+
+    function compose(remote){
+      var local=loadLocal();
+      var ex=examples.map(function(e){ return {text:e.text,name:e.name,ex:true}; });
+      msgs = (remote||local).concat(ex);
+      render();
+    }
+    function render(){
+      if(list){
+        list.innerHTML="";
+        msgs.slice(0,14).forEach(function(m){
+          var d=document.createElement("div"); d.className="note"+(m.ex?" ex":"");
+          d.innerHTML='<div class="t">'+esc(m.text)+'</div><div class="n">'+esc(m.name||"Anon")+'</div>';
+          list.appendChild(d);
+        });
+      }
+    }
+    function rotate(){
+      if(!msgs.length||!pin) return;
+      pin.classList.add("swap");
+      setTimeout(function(){
+        var m=msgs[pi%msgs.length]; pi++;
+        pin.innerHTML='<div><blockquote>“'+esc(m.text)+'”</blockquote><cite>— '+esc(m.name||"Anon")+'</cite></div>';
+        pin.classList.remove("swap");
+      }, 500);
+    }
+    function startRotate(){ if(pinTimer) clearInterval(pinTimer); pinTimer=setInterval(rotate, document.body.classList.contains("idle")?3200:5600); }
+
+    var idleT=null;
+    function resetIdle(){ document.body.classList.remove("idle"); clearTimeout(idleT); idleT=setTimeout(function(){ document.body.classList.add("idle"); startRotate(); }, 12000); }
+    ["mousemove","scroll","keydown","touchstart","click"].forEach(function(ev){ window.addEventListener(ev, resetIdle, {passive:true}); });
+
+    function add(m){
+      msgs.unshift(m);
+      var local=loadLocal(); local.unshift({text:m.text,name:m.name}); saveLocal(local);
+      render();
+      if(db){ try{ db.collection("messages").add({ text:m.text, name:m.name, createdAt: window.firebase.firestore.FieldValue.serverTimestamp() }); }catch(e){} }
+    }
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var t=document.getElementById("sc-msg").value.trim(), n=document.getElementById("sc-name").value.trim();
+      if(!t||!n){ statusEl.textContent="Add a message and a name."; statusEl.className="sc-status err"; return; }
+      add({text:t, name:n}); form.reset();
+      statusEl.textContent="Posted — thanks!"; statusEl.className="sc-status ok";
+      setTimeout(function(){ statusEl.textContent=""; statusEl.className="sc-status"; }, 2500);
+    });
+
+    function loadScript(src,cb){ var s=document.createElement("script"); s.src=src; s.onload=cb; s.onerror=function(){cb&&cb();}; document.head.appendChild(s); }
+    if(firebaseConfig){
+      loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js", function(){
+        loadScript("https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-firestore-compat.js", function(){
+          try{
+            window.firebase.initializeApp(firebaseConfig); db=window.firebase.firestore();
+            db.collection("messages").orderBy("createdAt","desc").limit(30).onSnapshot(function(snap){
+              var arr=[]; snap.forEach(function(doc){ var d=doc.data(); arr.push({text:d.text,name:d.name}); });
+              compose(arr);
+            });
+          }catch(e){}
+        });
+      });
+    }
+    compose(); rotate(); startRotate(); resetIdle();
   })();
 
 })();
