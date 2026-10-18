@@ -243,6 +243,32 @@ section{padding-block:clamp(80px,11vw,150px)}
 .socials a:hover{color:var(--fg)}
 .socials a::after{content:"↗"; margin-left:6px; color:var(--accent)}
 
+/* ---- contact form ---- */
+.cform{display:grid; gap:18px; max-width:540px; margin-top:12px}
+.cf-row{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+@media (max-width:560px){ .cf-row{grid-template-columns:1fr} }
+.field{display:flex; flex-direction:column; gap:8px}
+.field label{font-family:var(--m); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.field input, .field textarea{
+  font-family:var(--b); font-size:16px; color:var(--fg);
+  background:rgba(255,255,255,.55); border:1px solid var(--line); border-radius:12px;
+  padding:13px 15px; width:100%; transition:border-color .25s, background .25s;
+}
+.field input:focus, .field textarea:focus{outline:none; border-color:var(--accent); background:#fff}
+.field textarea{resize:vertical; min-height:120px}
+.cf-hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+.cf-submit{
+  justify-self:start; display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--m); font-size:14px; letter-spacing:.04em; color:#fff;
+  background:var(--accent); border:1px solid var(--accent); border-radius:50px;
+  padding:14px 26px; cursor:pointer; transition:background .25s, color .25s, opacity .25s;
+}
+.cf-submit:hover{background:transparent; color:var(--accent)}
+.cf-submit:disabled{opacity:.55; cursor:default}
+.cf-status{font-family:var(--m); font-size:13px; line-height:1.5; color:var(--muted); min-height:1.2em; margin:4px 0 0}
+.cf-status.ok{color:var(--accent-dim)}
+.cf-status.err{color:#c0392b}
+
 footer{
   padding-block:38px 56px; border-top:1px solid var(--line); margin-top:56px;
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
@@ -355,8 +381,8 @@ footer{
         <a class="card" data-reveal href="https://apps.apple.com/in/app/yaari/id6762041467" target="_blank" rel="noopener">
           <div class="card-top"><span class="card-idx">01 / Social</span><span class="card-badge">On App Store ↗</span></div>
           <h3>Yaari</h3>
-          <p>A real-time social app for events and connections — chat, event bookings, restaurant matching and slot-based reservations, all in SwiftUI.</p>
-          <div class="stack"><span>SwiftUI</span><span>Firebase</span><span>MVVM</span><span>async/await</span></div>
+          <p>A social app for meeting new people over curated dinners and events — event discovery &amp; ticketing, real-time chat, connections and location-based feeds. Built in SwiftUI, live on the App Store.</p>
+          <div class="stack"><span>SwiftUI</span><span>Firebase</span><span>Real-time Chat</span><span>MVVM</span></div>
           <span class="arrow">↗</span>
         </a>
         <a class="card" data-reveal href="https://github.com/hritu1701/LPU-Live" target="_blank" rel="noopener">
@@ -406,6 +432,30 @@ footer{
     <section id="contact" class="contact">
       <div class="sec-head"><span class="num">(05)</span> Contact <span class="ln"></span></div>
       <h2 class="big"><a href="mailto:hritu.iosdev@gmail.com">Let's<br>build →</a></h2>
+
+      <form class="cform" id="cform" action="https://formsubmit.co/hritu.iosdev@gmail.com" method="POST">
+        <div class="cf-row">
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@email.com">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-msg">Message</label>
+          <textarea id="cf-msg" name="message" required placeholder="What are you building?"></textarea>
+        </div>
+        <input type="hidden" name="_subject" value="New message from your portfolio">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input class="cf-hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="cf-submit" id="cf-submit" type="submit">Send message →</button>
+        <p class="cf-status" id="cf-status" role="status" aria-live="polite"></p>
+      </form>
+
       <div class="contact-row">
         <button class="mailbtn" id="mailbtn" type="button">
           <span class="tag" id="mailtag">Copy</span>
@@ -472,6 +522,35 @@ footer{
         var r=document.createRange(); r.selectNodeContents(document.getElementById("mailtext"));
         var s=getSelection(); s.removeAllRanges(); s.addRange(r); done();
       }
+    });
+  })();
+
+  /* ---------- contact form (FormSubmit AJAX) ---------- */
+  (function(){
+    var form=document.getElementById("cform");
+    if(!form) return;
+    var status=document.getElementById("cf-status"), btn=document.getElementById("cf-submit");
+    function setStatus(t,c){ status.textContent=t; status.className="cf-status"+(c?(" "+c):""); }
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var honey=form.querySelector('[name="_honey"]');
+      if(honey && honey.value) return; // bot trap
+      var name=document.getElementById("cf-name").value.trim();
+      var email=document.getElementById("cf-email").value.trim();
+      var message=document.getElementById("cf-msg").value.trim();
+      if(!name||!email||!message){ setStatus("Please fill in every field.","err"); return; }
+      btn.disabled=true; setStatus("Sending…","");
+      fetch("https://formsubmit.co/ajax/hritu.iosdev@gmail.com",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+        body:JSON.stringify({ name:name, email:email, message:message, _subject:"New message from your portfolio", _template:"table" })
+      }).then(function(r){ return r.json(); }).then(function(res){
+        if(res && (res.success===true || res.success==="true")){
+          form.reset(); setStatus("Thanks — your message is on its way. I'll get back to you soon.","ok");
+        } else { throw new Error("fail"); }
+      }).catch(function(){
+        setStatus("Couldn't send from here — email me directly at hritu.iosdev@gmail.com","err");
+      }).finally(function(){ btn.disabled=false; });
     });
   })();
 
